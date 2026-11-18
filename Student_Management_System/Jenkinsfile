@@ -1,0 +1,59 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+
+            steps {
+                echo 'Checking out source code from GitHub'
+                checkout scm
+            }
+        }
+
+        stage('Python Version') {
+
+            steps {
+                echo 'Checking Python installation'
+
+                sh 'python3 --version'
+            }
+        }
+
+        stage('Syntax Validation') {
+
+            steps {
+                echo 'Validating main.py syntax'
+
+                sh 'python3 -m py_compile main.py'
+            }
+        }
+
+        stage('Application Execution') {
+
+            steps {
+                echo 'Executing main.py'
+
+                sh 'python3 main.py'
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo 'BUILD SUCCESSFUL'
+            echo 'main.py validation completed'
+        }
+
+        failure {
+            echo 'BUILD FAILED'
+            echo 'Check the console output'
+        }
+
+        always {
+            echo 'Pipeline execution completed'
+        }
+    }
+}
