@@ -29,6 +29,12 @@ pipeline {
                 sh 'python3 main.py'
             }
         }
+	stage('Syntax Validation') {
+    	    steps {
+        	echo 'Validating Python files'
+       		 sh 'python3 -m py_compile main.py student.py'
+    	    }
+	}	
     }
 
     post {
