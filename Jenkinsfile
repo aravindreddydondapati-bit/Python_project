@@ -1,3 +1,4 @@
+```groovy
 pipeline {
 
     agent any
@@ -6,7 +7,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out source code from GitHub'
+                echo 'Checking out source code'
                 checkout scm
             }
         }
@@ -20,22 +21,30 @@ pipeline {
 
         stage('Syntax Validation') {
             steps {
-                echo 'Validating Python files'
+                echo 'Validating all Python files'
 
                 sh '''
                     python3 -m py_compile student.py
                     python3 -m py_compile test_student.py
+                    python3 -m py_compile marks.py
+                    python3 -m py_compile test_marks.py
                 '''
 
-                echo 'Python syntax validation successful'
+                echo 'Syntax validation successful'
             }
         }
 
         stage('Student Module Testing') {
             steps {
-                echo 'Executing Student Management Tests'
-
+                echo 'Testing Student Management Module'
                 sh 'python3 test_student.py'
+            }
+        }
+
+        stage('Marks Module Testing') {
+            steps {
+                echo 'Testing Marks Management Module'
+                sh 'python3 test_marks.py'
             }
         }
     }
@@ -44,12 +53,12 @@ pipeline {
 
         success {
             echo 'BUILD SUCCESSFUL'
-            echo 'Student Management System validation completed successfully'
+            echo 'Student and Marks modules validated successfully'
         }
 
         failure {
             echo 'BUILD FAILED'
-            echo 'Please check the Jenkins Console Output for errors'
+            echo 'Check Console Output for errors'
         }
 
         always {
@@ -57,4 +66,4 @@ pipeline {
         }
     }
 }
-
+```
